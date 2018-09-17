@@ -1,0 +1,108 @@
+import React from 'react';
+import Wrapper from "./components/Wrapper";
+import Card from "./components/Card";
+import Header from "./components/Header"
+
+function shuffle(array) {
+  let currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+// const allImageSourceNames = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
+const allImageSourceNames = ['red', 'blue', 'green'];
+
+class App extends React.Component {
+  state = {
+    allImages: allImageSourceNames.map(image => image),
+    unclickedImages: allImageSourceNames.map(image => image),
+    clickedImages: [],
+    score: 0,
+    gameOver: { status: false, didPlayerWin: "no" }
+  };
+
+  generateNewCards = () => {
+    let ret = [], i = 0;
+    const tempAllImages = this.state.allImages.map(image => image);
+    // This will choose a random non-clicked image
+    ret[0] = this.state.unclickedImages[Math.floor(Math.random() * this.state.unclickedImages.length)];
+    // We can tell if the player has clicked 'ALL' images without clicking one twice
+    // by checking if unclickedImages is empty
+    // console.log(typeof ret, typeof ret[0]);
+
+    // We will now make a temporary array that has every card except our first image
+    tempAllImages.splice(tempAllImages.indexOf(ret[0]), 1);
+    // Now we will shuffle our temporary array and add the first 2 images to our ret;
+
+    ret = ret.concat(shuffle(tempAllImages).slice(0, 2));
+
+    console.log(this.state.clickedImages);
+    return (ret.map(image => <Card image={image} key={i++} handleClickEvent={this.handleClickEvent} />))
+  };
+
+
+
+  handleClickEvent = event => {
+    // To update state correctly we need temporary constants of the state's arrays
+    const { unclickedImages, clickedImages } = this.state;
+    // score and gameover needs to be able to be changed so we leave it at 'let'
+    let { score, gameOver } = this.state;
+    // A constant to get the image value of our Card
+    // console.log(event.target.attributes);
+    const imageName = event.target.attributes.getNamedItem('image').value;
+    // An index constant in our unclicked images
+    const indexOfImageName = unclickedImages.indexOf(imageName);
+    // Splice updates the array it's on and we want
+    // it to remove the image we clicked on
+    unclickedImages.splice(indexOfImageName, 1);
+
+    if (!clickedImages.includes(imageName)) {
+      score++;
+    } else {
+      gameOver.status = true;
+    };
+
+    clickedImages.push(imageName);
+    this.setState({
+      clickedImages: clickedImages,
+      unclickedImages: unclickedImages,
+      score: score,
+      gameOver: gameOver
+    });
+    // We don't call generateNewCards because by updating App's state and by specifically calling 
+    // the function in our render, it will call itself automatically
+
+    // console.log(this.state.)
+  };
+
+  render() {
+    return (
+      <div>
+        <Header score={this.state.score} />
+        <Wrapper>
+          {this.state.gameOver.status ? this.state.gameOver.didPlayerWin : this.generateNewCards()}
+        </Wrapper>
+      </div>
+    );
+  };
+};
+
+
+
+
+
+
+export default App;
