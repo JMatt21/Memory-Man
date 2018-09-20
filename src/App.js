@@ -25,7 +25,7 @@ function shuffle(array) {
 }
 
 // const allImageSourceNames = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
-const allImageSourceNames = ["30sMilkMan", "BatBoy", "BurgahBoy", "Byeah", "DannyDevito", "FatElvis", 
+const allImageSourceNames = ["30sMilkman", "BatBoy", "BurgahBoy", "Byeah", "DannyDevito", "FatElvis", 
                     "FrankPizza", "GlueMan", "Heavy", "Mbyeah", "MonopolyGuy", "Obama", "Sonic", "TheChicken", "TheEgg"];
 
 class App extends React.Component {
