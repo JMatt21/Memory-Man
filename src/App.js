@@ -1,7 +1,9 @@
 import React from 'react';
 import Wrapper from "./components/Wrapper";
 import Card from "./components/Card";
-import Header from "./components/Header"
+import Header from "./components/Header/Header";
+import Won from "./components/GameOverText/Won";
+import Lost from "./components/GameOverText/Lost";
 
 function shuffle(array) {
   let currentIndex = array.length, temporaryValue, randomIndex;
@@ -23,7 +25,8 @@ function shuffle(array) {
 }
 
 // const allImageSourceNames = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
-const allImageSourceNames = ['red', 'blue', 'green'];
+const allImageSourceNames = ["30sMilkMan", "BatBoy", "BurgahBoy", "Byeah", "DannyDevito", "FatElvis", 
+                    "FrankPizza", "GlueMan", "Heavy", "Mbyeah", "MonopolyGuy", "Obama", "Sonic", "TheChicken", "TheEgg"];
 
 class App extends React.Component {
   state = {
@@ -39,9 +42,6 @@ class App extends React.Component {
     const tempAllImages = this.state.allImages.map(image => image);
     // This will choose a random non-clicked image
     ret[0] = this.state.unclickedImages[Math.floor(Math.random() * this.state.unclickedImages.length)];
-    // We can tell if the player has clicked 'ALL' images without clicking one twice
-    // by checking if unclickedImages is empty
-    // console.log(typeof ret, typeof ret[0]);
 
     // We will now make a temporary array that has every card except our first image
     tempAllImages.splice(tempAllImages.indexOf(ret[0]), 1);
@@ -49,11 +49,9 @@ class App extends React.Component {
 
     ret = ret.concat(shuffle(tempAllImages).slice(0, 2));
 
-    console.log(this.state.clickedImages);
-    return (ret.map(image => <Card image={image} key={i++} handleClickEvent={this.handleClickEvent} />))
+    console.log(ret);
+    return shuffle(ret.map(image => <Card image={image} key={i++} handleClickEvent={this.handleClickEvent} />))
   };
-
-
 
   handleClickEvent = event => {
     // To update state correctly we need temporary constants of the state's arrays
@@ -69,10 +67,20 @@ class App extends React.Component {
     // it to remove the image we clicked on
     unclickedImages.splice(indexOfImageName, 1);
 
+    // Checking if the player has won
+
+    if (typeof this.state.unclickedImages[0] === "undefined"){
+      gameOver.status = true;
+      gameOver.didPlayerWin = <Won reset={this.reset}/>;
+    }
+
+    // Just incase if the code above triggers at the same time the 
+    // user guesses the wrong image
     if (!clickedImages.includes(imageName)) {
       score++;
     } else {
       gameOver.status = true;
+      gameOver.didPlayerWin = <Lost reset={this.reset}/>;
     };
 
     clickedImages.push(imageName);
@@ -88,10 +96,19 @@ class App extends React.Component {
     // console.log(this.state.)
   };
 
+  reset = () => {
+    this.setState({
+      allImages: allImageSourceNames.map(image => image),
+      unclickedImages: allImageSourceNames.map(image => image),
+      clickedImages: [],
+      score: 0,
+      gameOver: { status: false, didPlayerWin: "no" }
+    })
+  }
   render() {
     return (
-      <div>
-        <Header score={this.state.score} />
+      <div className="bg-faded">
+        <Header score={this.state.score} reset={this.reset}/>
         <Wrapper>
           {this.state.gameOver.status ? this.state.gameOver.didPlayerWin : this.generateNewCards()}
         </Wrapper>
