@@ -1,0 +1,14 @@
+.imgContainer {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.centered {
+    position: absolute;
+    min-width: 278px;
+    background: rgba(109, 109, 109, 0.90);
+    top: 77.5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

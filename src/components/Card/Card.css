@@ -1,0 +1,27 @@
+.bgImage {
+    height: 250px;
+    background-repeat: no-repeat;
+    background-size: 100% 250px;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 990px){
+    .bgImage {
+        height: 230px;
+        background-size: 100% 230px;
+    }
+}
+
+@media screen and (max-width: 768px){
+    .bgImage {
+        height: 160px;
+        background-size: 100% 160px;
+    }
+}
+
+@media screen and (max-width: 425px){
+    .bgImage {
+        height: 125px;
+        background-size: 100% 125px;
+    }
+}

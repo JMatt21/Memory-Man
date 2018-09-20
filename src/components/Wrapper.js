@@ -2,8 +2,8 @@ import React from "react";
 
 const Wrapper = ({ children }) => {
     return (
-        <div className="container">
-            <div className="row">
+        <div className="container overflow-hidden mb-5">
+            <div className="row justify-content-between">
                 {children}
             </div>
         </div>
