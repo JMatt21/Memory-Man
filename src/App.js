@@ -111,6 +111,7 @@ class App extends React.Component {
         <Header score={this.state.score} reset={this.reset}/>
         <Wrapper>
           {this.state.gameOver.status ? this.state.gameOver.didPlayerWin : this.generateNewCards()}
+          test submit please ignore
         </Wrapper>
       </div>
     );
